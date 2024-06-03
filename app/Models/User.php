@@ -18,6 +18,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
     ];
@@ -43,5 +44,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // One-to-one relationship with Author model
+    public function author()
+    {
+        return $this->hasOne(Author::class, 'user_id', 'id');
     }
 }
