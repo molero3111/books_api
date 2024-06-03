@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('author_id');
             $table->foreign('author_id')->references('id')->on('authors');  // foreign key constraint
             $table->string('title', 250)->index('book_title_index');
             $table->string('genre', 100);

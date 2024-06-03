@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');  // foreign key constraint
             $table->string('nickname', 100)->unique();
-            $table->integer('published_books', false, true);
+            $table->unsignedSmallInteger('published_books');
             $table->timestamps();
         });
     }
