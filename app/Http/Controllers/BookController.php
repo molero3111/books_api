@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateBookRequest;
 use App\Models\Book;
+use App\Utils\DAO;
 use Illuminate\Http\Request;
+use \Illuminate\Http\JsonResponse;
 
 class BookController extends Controller
 {
@@ -12,40 +15,89 @@ class BookController extends Controller
      */
     public function index()
     {
-        
-        $authors = Book::all();
-        return response()->json($authors);
+        return response()->json(
+            DAO::paginateWithEagerLoading(Book::class, ['author'])
+        );
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param StoreUpdateBookRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreUpdateBookRequest $request)
     {
-        //
+        $validated_book_data = $request->validated();
+        $book = Book::create($validated_book_data);
+
+        return response()->json([
+            'message' => 'Book created successfully!',
+            'data' => $book,
+        ], 200);
     }
 
-    /**
+   /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    public function show(string $id)
     {
-        //
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Book found successfully!',
+            'data' => $book,
+        ], 200);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param StoreUpdateBookRequest $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Book $book)
+    public function update(StoreUpdateBookRequest $request, string $id)
     {
-        //
+
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found.',
+            ], 404);
+        }
+        $book->update($request->validated());
+        return response()->json([
+            'message' => 'Book updated successfully!',
+            'data' => $book,
+        ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Author $author
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Book $book)
+    public function destroy(string $id)
     {
-        //
+        $book = Book::find($id);
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found!',
+            ], 404);
+        }
+        $book->delete();
+        return response()->json([
+            'message' => 'Book deleted successfully!',
+            'user' => $book
+        ], 200);
     }
 }

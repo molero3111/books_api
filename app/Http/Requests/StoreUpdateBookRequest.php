@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreUpdateAuthorRequest extends FormRequest
+class StoreUpdateBookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,14 @@ class StoreUpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => [
+            'author_id' => [
                 'required_if_accepted:is_insert,1',
                 'numeric',
-                Rule::exists('users', 'id'),
-                Rule::unique('authors', 'user_id'),
+                Rule::exists('authors', 'id'),
             ],
-            'nickname' => [
-                'required_if_accepted:is_insert,1',
-                'string',
-                'max:255',
-                Rule::unique('authors', 'nickname'),
-            ],
+            'title' => 'required_if_accepted:is_insert,1|string|min:4|max:255',
+            'genre' => 'required_if_accepted:is_insert,1|string|min:4|max:50',
+            'published_at' => ['required_if_accepted:is_insert,1', 'date', 'date_format:Y-m-d H:i:s'], 
         ];
     }
 }

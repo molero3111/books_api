@@ -10,14 +10,6 @@ services:
     networks: 
       - books_api_network  
 
-  books-redis: # Configuration for the Redis service.
-    image: "redis:7.2.1"  
-    env_file: 
-      - ./.env  
-    command: redis-server --requirepass ${REDIS_PASSWORD-8600966989}
-    networks: 
-      - books_api_network
-
 volumes: # Defines named volumes for persistent storage.
   postgres_data:  # Defines a named volume for PostgresSQL data storage.
 

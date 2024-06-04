@@ -5,8 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreUpdateAuthorRequest extends FormRequest
+class StoreUpdateUserRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -23,18 +24,22 @@ class StoreUpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => [
-                'required_if_accepted:is_insert,1',
-                'numeric',
-                Rule::exists('users', 'id'),
-                Rule::unique('authors', 'user_id'),
-            ],
-            'nickname' => [
+            'name' => 'required_if_accepted:is_insert,1|string|max:255',
+            'username' => [
                 'required_if_accepted:is_insert,1',
                 'string',
                 'max:255',
-                Rule::unique('authors', 'nickname'),
+                Rule::unique('users', 'username'), // Ensures unique username
             ],
+            'email' => [
+                'required_if_accepted:is_insert,1',
+                'string',
+                'email', // Validates email format
+                'max:255',
+                Rule::unique('users', 'email'), // Ensures unique email
+            ],
+            'password' => 'required_if_accepted:is_insert,1|string|min:4|max:255',
+            'role' => 'required_if_accepted:is_insert,1|string|exists:roles,name'
         ];
     }
 }

@@ -18,7 +18,7 @@ class VerifyAdminRoleMiddleware
     {
         $user = $request->user();
         if (!$user->tokenCan($role) || !$user->hasRole($role)) {
-            return response()->json(['message' => 'Unauthorized. You are not allowed to perform this action.'], 403);
+            return response()->json(['message' => 'Unauthorized. You are not allowed to perform this action.'], 401);
         }
         return $next($request);
     }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');  // foreign key constraint
             $table->string('nickname', 100)->unique();
-            $table->unsignedSmallInteger('published_books');
+            $table->unsignedSmallInteger('published_books')->default(0);
             $table->timestamps();
         });
     }
