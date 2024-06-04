@@ -12,7 +12,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        
+        $authors = Book::all();
+        return response()->json($authors);
     }
 
     /**

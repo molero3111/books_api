@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\Role;
 use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -21,23 +22,19 @@ class UsersAuthorsBooksSeeder extends Seeder
     {
         $faker = FakerFactory::create();
 
-        // Remove existing users, authors, and books
-        Book::truncate();
-        Author::truncate();
-        User::truncate();
-       
-
         echo "Creating users\n";
         // Prepare user data for bulk insert
         $users = [];
         $total_users = env('USERS_TO_SEED', 2000);
         $password = Hash::make(env('SEEDER_TEST_PASSWORD', 'test'));
+        $role_id = Role::where('name', 'user')->value('id');
         foreach (range(1, $total_users) as $i) {
             if ($i % 100 == 0) {
                 echo "On iteration: $i / $total_users\n";
             }
             $username = $this::generateUniqueUsername();
             $users[] = [
+                'role_id' => $role_id,
                 'name' => $faker->name(),
                 'username' => $username,
                 'email' => $username . '@test.com',

@@ -1,0 +1,15 @@
+<?php
+
+use App\Http\Controllers\AuthenticationController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
+
+Route::get('/login', [AuthenticationController::class, 'login'])->name('login');
+
+Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
+
+Route::group(['middleware' => ['auth:sanctum', 'verify_admin_role:admin']], function () {
+    Route::resource('authors', AuthorController::class);
+    Route::resource('/books', BookController::class);
+});
