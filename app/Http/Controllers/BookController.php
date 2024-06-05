@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookProcessed;
 use App\Http\Requests\StoreUpdateBookRequest;
+use App\Models\Author;
 use App\Models\Book;
 use App\Utils\DAO;
-use Illuminate\Http\Request;
 use \Illuminate\Http\JsonResponse;
 
 class BookController extends Controller
@@ -31,13 +32,15 @@ class BookController extends Controller
         $validated_book_data = $request->validated();
         $book = Book::create($validated_book_data);
 
+        event(new BookProcessed($book->author));
+
         return response()->json([
             'message' => 'Book created successfully!',
             'data' => $book,
         ], 200);
     }
 
-   /**
+    /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -94,10 +97,13 @@ class BookController extends Controller
                 'message' => 'Book not found!',
             ], 404);
         }
+
         $book->delete();
+        event(new BookProcessed($book->author));
+
         return response()->json([
             'message' => 'Book deleted successfully!',
-            'user' => $book
+            'data' => $book,
         ], 200);
     }
 }

@@ -108,7 +108,7 @@ class AuthorController extends Controller
         $author->delete();
         return response()->json([
             'message' => 'Author deleted successfully!',
-            'user' => $author
+            'data' => $author
         ], 200);
     }
 }
