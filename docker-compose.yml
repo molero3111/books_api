@@ -1,18 +1,66 @@
 version: '3.8'
 
 services:
-  books-db: # Configuration for the database service.
-    image: postgis/postgis:13-3.1  
-    volumes: 
-      - postgres_data:/var/lib/postgresql/data/  # Maps a volume for PostgresSQL data storage.
+  books-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: books-api
+    ports:
+      - "8000:80"
     env_file:
-      - ./.env 
-    networks: 
-      - books_api_network  
+      - .env
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - books-db
+      - books-redis
+    networks:
+      - books_api_network
 
-volumes: # Defines named volumes for persistent storage.
-  postgres_data:  # Defines a named volume for PostgresSQL data storage.
+  books-db:
+    image: postgres:latest
+    container_name: books-db
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - books_api_network
+
+  books-redis:
+    image: redis:latest
+    container_name: books-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - books_api_network
+
+  books-queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: books-queue
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html
+    command: php artisan queue:work
+    depends_on:
+      - books-db
+      - books-redis
+    networks:
+      - books_api_network
+
+volumes:
+  pgdata:
+  redisdata:
 
 networks: 
   books_api_network:  # Configuration for the "books_api_network" network.
-    external: true  # Indicates that this network is defined externally and should be reused if it already exists.
+    external: true  # Indicates that this network is defined externally and should be reused if it already exists. 
+    # This allows python / Django books api to work with this db 
