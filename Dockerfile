@@ -41,7 +41,5 @@ EXPOSE 80
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Migrations
-CMD ["./run_migrations.sh"]
 # Start Apache server
 CMD ["apache2-foreground"]

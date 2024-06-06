@@ -49,7 +49,7 @@ services:
       - .env
     volumes:
       - .:/var/www/html
-    command: php artisan queue:work
+    command: /bin/sh -c "php artisan migrate && php artisan db:seed && php artisan queue:work"
     depends_on:
       - books-db
       - books-redis
