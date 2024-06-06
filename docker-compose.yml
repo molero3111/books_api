@@ -15,6 +15,7 @@ services:
     depends_on:
       - books-db
       - books-redis
+      - books-queue
     networks:
       - books_api_network
 
