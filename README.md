@@ -28,31 +28,37 @@ git clone https://github.com/molero3111/books_api.git
 cd books_api/
 ```
 
-3. Create .env:
+3. Switch to staging branch:
+```bash
+git checkout staging
+```
+You may stay on development, but staging branch will have the most stable version.
+
+4. Create .env:
 
 ```bash
 cp .env.example .env
 ```
 
-4. Install packages:
+5. Install packages:
 
 ```bash
 composer install
 ```
 
-5. Generate app key:
+6. Generate app key:
 
 ```bash
 php artisan key:generate
 ```
 
-6. Create books_api_network:
+7. Create books_api_network:
 
 ```bash
 docker network create notes_api_network
 ```
 
-7. Build and run docker containers:
+8. Build and run docker containers:
 
 ```bash
 docker compose -p local up --build
@@ -70,7 +76,7 @@ php artisan migrate && php artisan db:seed && php artisan queue:work
 ```
 That will manually run the migrations, seeding and queue.
 
-8. Set up your first admin user:
+9. Set up your first admin user:
 
 Access the books-api container with command:
 ```bash
@@ -85,7 +91,7 @@ For example:
 php artisan create:admin-user john john23 john234@example.com test23
 ```
 
-With this user you will be able to log in to the API and even create other users with admin access if you wish so.
+With this user you will be able to log in to the API, and even create other users with admin access if you wish so.
 
 ## Test project
 
