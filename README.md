@@ -1,19 +1,103 @@
-### steps
+# Books API
 
-copy .env
+## Description
 
+Books API offering CRUD action on users, authors, and books.
+
+##  Runtimes, engines, tools and requirements
+
+- **Language**: PHP
+- **Framework**: Laravel
+- **Packages:**: 
+    - laravel/sanctum (For JWT authentication)
+    - maatwebsite/excel (For xlsx file generation)
+- **Database**: PostgreSQL
+- **Cache**: Redis (For job queue)
+
+## Run Project locally
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/molero3111/books_api.git
+```
+
+2. cd into notes api repository:
+
+```bash
+cd books_api/
+```
+
+3. Create .env:
+
+```bash
+cp .env.example .env
+```
+
+4. Install packages:
+
+```bash
+composer install
+```
+
+5. Generate app key:
+
+```bash
 php artisan key:generate
+```
 
-create admin user using command 
+6. Create books_api_network:
 
-php artisan create:admin-user {name} {username} {email} {password}
+```bash
+docker network create notes_api_network
+```
 
+7. Build and run docker containers:
 
-example: 
-php artisan create:admin-user emmanuel molero3111 molero3111@example.com 8778690
+```bash
+docker compose -p local up --build
+```
 
-php artisan queue:work
+The books-queue service should have executed all needed migrations and seeded the db as well.
+In the case there was an error with it, you may access the books-api container with command: 
+```bash
+docker exec -it books-api /bin/bash
+```
 
-sudo apt-get install php8.3-gd
-sudo apt-get install php8.3-zip  # Replace 8.3 with your actual PHP version
+Once in it, you can execute this command: 
+```bash
+php artisan migrate && php artisan db:seed && php artisan queue:work
+```
+That will manually run the migrations, seeding and queue.
 
+8. Set up your first admin user:
+
+Access the books-api container with command:
+```bash
+docker exec -it books-api /bin/bash
+```
+The project has a laravel custom command you can use to create admin user, execute: 
+```bash
+php artisan create:admin-user {name} {usernmae} {email} {password}
+```
+For example: 
+```bash
+php artisan create:admin-user john john23 john234@example.com test23
+```
+
+With this user you will be able to log in to the API and even create other users with admin access if you wish so.
+
+## Test project
+
+After following these steps you can access home page at http://localhost:8000. 
+
+For futher testing and usage, follow documentation to send requests to the API.
+
+## Documentation
+
+### API
+The API documentation was done with postman, you may find it here: 
+https://www.postman.com/molero3111/workspace/books-api/documentation/9720967-ecb6b09c-1a10-41f0-9c1e-ddc57924699e
+
+### Database
+You may find ER diagram of the database in database/ER_diagram/books_ER_diagram.pdf
