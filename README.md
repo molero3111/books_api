@@ -2,7 +2,7 @@
 
 ## Description
 
-Books API offering CRUD action on users, authors, and books.
+Books API offering CRUD actions on users, authors, and books.
 
 ##  Runtimes, engines, tools and requirements
 
