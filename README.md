@@ -40,22 +40,10 @@ You may stay on development, but staging branch will have the most stable versio
 cp .env.example .env
 ```
 
-5. Install packages:
-
-```bash
-composer install
-```
-
-6. Generate app key:
-
-```bash
-php artisan key:generate
-```
-
 7. Create books_api_network:
 
 ```bash
-docker network create notes_api_network
+docker network create books_api_network
 ```
 
 8. Build and run docker containers:
@@ -96,6 +84,41 @@ With this user you will be able to log in to the API, and even create other user
 ## Test project
 
 After following these steps you can access home page at http://localhost:8000. 
+In case you get permission errors on storage or bootstrap directories, access the books-api
+container with command:
+
+```bash
+docker exec -it books-api /bin/bash
+```
+
+Once in it, change owner: 
+```bash
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+```
+
+### Optional
+
+If you would like to execute php artisan commands, you need to install packages on your host machine, follow these steps: 
+
+1. Install packages:
+
+```bash
+composer install
+```
+
+In case composer install is failing, it could be because of the maatweb/excel package.
+It requires gd and ext-zip extensions to be installed, you may install them with this command:
+
+```bash
+sudo apt-get install php8.2-zip php8.2-gd
+```
+
+2. Generate app key:
+
+```bash
+php artisan key:generate
+```
 
 For futher testing and usage, follow documentation to send requests to the API.
 
