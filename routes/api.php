@@ -7,7 +7,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\UserController;
 
-Route::get('/login', [AuthenticationController::class, 'login'])->name('login');
+Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
 
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
 
