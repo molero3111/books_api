@@ -4,10 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: books-api
-    ports:
-      - "${HOST_MACHINE_WEB_PORT:-8001}:80"
     env_file:
       - .env
+    ports:
+      - "${HOST_MACHINE_WEB_PORT:-8000}:80"
     volumes:
       - .:/var/www/html
     depends_on:
