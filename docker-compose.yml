@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: books-api
     ports:
-      - "8000:80"
+      - "${HOST_MACHINE_WEB_PORT:-8001}:80"
     env_file:
       - .env
     volumes:

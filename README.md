@@ -11,7 +11,7 @@ Books API offering CRUD actions on users, authors, and books.
 - **Packages:**: 
     - laravel/sanctum (For JWT authentication)
     - maatwebsite/excel (For xlsx file generation)
-- **Database**: PostgreSQL
+- **Database**: PostgresSQL
 - **Cache**: Redis (For job queue)
 
 ## Run Project locally
@@ -40,13 +40,13 @@ You may stay on development, but staging branch will have the most stable versio
 cp .env.example .env
 ```
 
-7. Create books_api_network:
+5. Create books_api_network:
 
 ```bash
 docker network create books_api_network
 ```
 
-8. Build and run docker containers:
+6. Build and run docker containers:
 
 ```bash
 docker compose -p local up --build
@@ -60,11 +60,11 @@ docker exec -it books-api /bin/bash
 
 Once in it, you can execute this command: 
 ```bash
-php artisan migrate && php artisan db:seed && php artisan queue:work
+php artisan key:generate && php artisan migrate && php artisan db:seed && php artisan queue:work
 ```
 That will manually run the migrations, seeding and queue.
 
-9. Set up your first admin user:
+7. Set up your first admin user:
 
 Access the books-api container with command:
 ```bash
@@ -114,18 +114,12 @@ It requires gd and ext-zip extensions to be installed, you may install them with
 sudo apt-get install php8.2-zip php8.2-gd
 ```
 
-2. Generate app key:
-
-```bash
-php artisan key:generate
-```
-
-For futher testing and usage, follow documentation to send requests to the API.
+For further testing and usage, follow documentation bellow to send requests to the API.
 
 ## Documentation
 
 ### API
-The API documentation was done with postman, you may find it here: 
+The API documentation is on postman, you may find it here: 
 https://www.postman.com/molero3111/workspace/books-api/documentation/9720967-ecb6b09c-1a10-41f0-9c1e-ddc57924699e
 
 ### Database
