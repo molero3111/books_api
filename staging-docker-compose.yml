@@ -1,0 +1,61 @@
+services:
+  books-api:
+    image: molero3111/app_images:books_api.v1
+    container_name: books-api
+    env_file:
+      - .env
+    ports:
+      - "${HOST_MACHINE_WEB_PORT:-8000}:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - books-db
+      - books-redis
+      - books-queue
+    networks:
+      - books_api_network
+
+  books-db:
+    image: postgres:latest
+    container_name: books-db
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - books_api_network
+
+  books-redis:
+    image: redis:latest
+    container_name: books-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - books_api_network
+
+  books-queue:
+    image: molero3111/app_images:books_api.v1
+    container_name: books-queue
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html
+    command: /bin/sh -c "php artisan key:generate && php artisan migrate && php artisan db:seed && php artisan queue:work"
+    depends_on:
+      - books-db
+      - books-redis
+    networks:
+      - books_api_network
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks: 
+  books_api_network:  # Configuration for the "books_api_network" network.
+    external: true  # Indicates that this network is defined externally and should be reused if it already exists. 
+    # This allows python / Django books api to work with this db 
