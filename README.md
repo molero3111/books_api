@@ -22,7 +22,7 @@ Books API offering CRUD actions on users, authors, and books.
 git clone https://github.com/molero3111/books_api.git
 ```
 
-2. cd into notes api repository:
+2. cd into books_api repository:
 
 ```bash
 cd books_api/
