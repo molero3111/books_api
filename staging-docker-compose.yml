@@ -6,8 +6,6 @@ services:
       - .env
     ports:
       - "${HOST_MACHINE_WEB_PORT:-8000}:80"
-    volumes:
-      - .:/var/www/html
     depends_on:
       - books-db
       - books-redis
@@ -42,8 +40,6 @@ services:
     container_name: books-queue
     env_file:
       - .env
-    volumes:
-      - .:/var/www/html
     command: /bin/sh -c "php artisan key:generate && php artisan migrate && php artisan db:seed && php artisan queue:work"
     depends_on:
       - books-db
