@@ -2,12 +2,12 @@ services:
   books-api:
     image: molero3111/app_images:books_api.v1
     container_name: books-api
+    volumes:
+      - .env:/var/www/html/.env
     env_file:
       - .env
     ports:
       - "${HOST_MACHINE_WEB_PORT:-8000}:80"
-    volumes:
-      - .env:/var/www/html/.env
     depends_on:
       - books-db
       - books-redis
@@ -40,6 +40,8 @@ services:
   books-queue:
     image: molero3111/app_images:books_api.v1
     container_name: books-queue
+    volumes:
+      - .env:/var/www/html/.env
     env_file:
       - .env
     command: /bin/sh -c "php artisan key:generate && php artisan migrate && php artisan db:seed && php artisan queue:work"
