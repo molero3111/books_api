@@ -1,5 +1,5 @@
 services:
-  ooks-db:
+  books-db:
     image: postgres:latest
     container_name: books-db
     environment:
