@@ -1,6 +1,7 @@
 services:
   books-db:
     image: postgres:latest
+    restart: always
     container_name: books-db
     environment:
       POSTGRES_DB: ${DB_DATABASE}
@@ -13,6 +14,7 @@ services:
 
   books-redis:
     image: redis:latest
+    restart: always
     container_name: books-redis
     ports:
       - "6379:6379"
@@ -23,6 +25,7 @@ services:
 
   books-queue:
     image: molero3111/app_images:books_api.v1
+    restart: always
     container_name: books-queue
     volumes:
       - .env:/var/www/html/.env
@@ -37,6 +40,7 @@ services:
 
   books-api:
     image: molero3111/app_images:books_api.v1
+    restart: always
     container_name: books-api
     volumes:
       - .env:/var/www/html/.env
