@@ -1,22 +1,4 @@
 services:
-  books-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: books-api
-    env_file:
-      - .env
-    ports:
-      - "${HOST_MACHINE_WEB_PORT:-8000}:80"
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      - books-db
-      - books-redis
-      - books-queue
-    networks:
-      - books_api_network
-
   books-db:
     image: postgres:latest
     container_name: books-db
@@ -25,7 +7,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     networks:
       - books_api_network
 
@@ -52,6 +34,24 @@ services:
     depends_on:
       - books-db
       - books-redis
+    networks:
+      - books_api_network
+
+  books-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: books-api
+    env_file:
+      - .env
+    ports:
+      - "${HOST_MACHINE_WEB_PORT:-8000}:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - books-db
+      - books-redis
+      - books-queue
     networks:
       - books_api_network
 

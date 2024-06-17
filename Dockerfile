@@ -13,6 +13,13 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install pdo pdo_pgsql zip gd
 
+# Install Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+# Copy and configure Xdebug
+COPY ./xdebug-configs/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 # Install PHP Redis extension using PECL
 RUN pecl install redis && docker-php-ext-enable redis
 
