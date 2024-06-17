@@ -4,6 +4,30 @@
 
 Books API offering CRUD actions on users, authors, and books.
 
+The API offers:
+
+- JWT authentication using the sanctum package.
+- Login.
+- CRUD of users, authors, and books.
+- Requests validated by token and authorized only for users with an administrator role.
+- Listener located in app/Listeners/UpdateBookCount.php that when a book is registered in the BookController store method, the BookProcesed event located in app/Events/BookProcesed.php invokes the ProcessBookCountUpdate job located in app/Jobs/ ProcessBookCountUpdate .php which updates the number of books in the authors table represented by the published_books field, this same number of books is also updated using the same BookProcessed event in the destroy method of the BookController to maintain consistency when deleting a book as well.
+- Jobs are processed by a queue that is configured with redis in the books-queue container in the docker-compose.yml file.
+- ExportController that is used to export data from the authors and books tables to an xlsx file, for this it uses the maatwebsite/excel package.
+
+## Deploy
+
+The API is deployed and available at https://emmanuelcodinghub.com/books-api/, 
+you can use username admin with password admin7891 to log in and send other requests to API.
+
+## Documentation
+
+### API
+The API documentation: 
+https://www.postman.com/molero3111/workspace/books-api/environment/9720967-9785b84a-6c5f-437a-bf82-51cfae827fbe
+
+### Database
+You may find ER diagram of the database in database/ER_diagram/books_ER_diagram.pdf
+
 ##  Runtimes, engines, tools and requirements
 
 - **Language**: PHP
@@ -114,13 +138,4 @@ It requires gd and ext-zip extensions to be installed, you may install them with
 sudo apt-get install php8.2-zip php8.2-gd
 ```
 
-For further testing and usage, follow documentation bellow to send requests to the API.
-
-## Documentation
-
-### API
-The API documentation is on postman, you may find it here: 
-https://www.postman.com/molero3111/workspace/books-api/documentation/9720967-ecb6b09c-1a10-41f0-9c1e-ddc57924699e
-
-### Database
-You may find ER diagram of the database in database/ER_diagram/books_ER_diagram.pdf
+For further testing and usage, follow documentation to send requests to the API.
