@@ -96,7 +96,7 @@ docker exec -it books-api /bin/bash
 ```
 The project has a laravel custom command you can use to create admin user, execute: 
 ```bash
-php artisan create:admin-user {name} {usernmae} {email} {password}
+php artisan create:admin-user {name} {username} {email} {password}
 ```
 For example: 
 ```bash
